@@ -103,4 +103,4 @@ def build_index(data_dir: str = DATA_DIR) -> int:
 
 if __name__ == "__main__":
     count = build_index()
-    print(f"Indexed {count} chunks from {DATA_DIR} into ChromaDB at {CHROMA_DB_DIR}")
+    print(f"Indexed {count} chunks from '{DATA_DIR}/' into ChromaDB at '{CHROMA_DB_DIR}/'.")
