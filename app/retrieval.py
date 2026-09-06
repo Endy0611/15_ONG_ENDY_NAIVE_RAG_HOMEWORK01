@@ -2,14 +2,13 @@
 Stage 2 of the pipeline: given a question, find the chunks most likely to contain the answer.
 """
 
-from curses import meta
-from typing import List, typedDict
+from typing import List, TypedDict
 
 from app.config import TOP_K
 from app.embeddings import embed_query
 from app.ingest import get_collection
 
-class RetrievedChunk(typedDict):
+class RetrievedChunk(TypedDict):
     text: str
     source: str
     chunk_index: int
@@ -33,8 +32,8 @@ def retrieve(query: str, top_k: int = TOP_K) -> List[RetrievedChunk]:
         chunks.append(
             {
                 "text": text,
-                "source": meta.get("source", "unknown"),
-                "chunk_index": meta.get("chunk_index", -1),
+                "source": metadata.get("source", "unknown"),
+                "chunk_index": metadata.get("chunk_index", -1),
                 "distance": distance,
             } # type:ignore
         )
