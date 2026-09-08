@@ -9,6 +9,9 @@ Then test it with curl (see README.md for full examples):
     curl -X POST http://127.0.0.1:8000/ingest
     curl -X POST http://127.0.0.1:8000/chat -H "Content-Type: application/json" \
         -d '{"query": "What is the vacation policy?"}'
+
+Or run it as a plain terminal chat loop (no server needed):
+    poetry run python -m app.main
 """
 
 import logging
@@ -18,9 +21,8 @@ logging.getLogger("chromadb.telemetry.product.posthog").setLevel(logging.CRITICA
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-from app.generate import generate_answer
-from app.ingest import build_index
-from app.retrieval import retrieve
+from app.pipeline import answer_question
+from app.vector_store import build_index
 
 app = FastAPI(title="Baseline Chat-with-Docuements API")
 
@@ -46,7 +48,22 @@ def chat(req: ChatRequest):
     """The full retrieve -> augment -> generate loop for one question."""
     if not req.question.strip():
         raise HTTPException(status_code=400, detail="question must not be empty")
-    chunks = retrieve(req.question, top_k=req.top_k) if req.top_k else retrieve(req.question)
-    answer = generate_answer(req.question, chunks)
-    sources = sorted({c["source"] for c in chunks})
-    return ChatResponse(answer=answer, sources=sources)
+    result = answer_question(req.question, req.top_k)
+    return ChatResponse(answer=result["answer"], sources=result["sources"])
+
+def run_chat_loop():
+    """Terminal chat loop: ask a question, print the answer, ask again. Type exit to quit."""
+    print("Baseline RAG chat. Type your question, or 'exit' to quit.\n")
+    while True:
+        question = input("Question: ").strip()
+        if question.lower() == "exit":
+            break
+        if not question:
+            continue
+        result = answer_question(question)
+        print(f"Answer: {result['answer']}")
+        if result["sources"]:
+            print(f"Sources: {', '.join(result['sources'])}")
+
+if __name__ == "__main__":
+    run_chat_loop()

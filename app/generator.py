@@ -8,7 +8,7 @@ from typing import List
 import ollama
 
 from app.config import GEN_MODEL, GEN_MODEL, SYSTEM_PROMPT
-from app.retrieval import RetrievedChunk
+from app.retriever import RetrievedChunk
 
 def build_prompt(query: str, chunks: List[RetrievedChunk]) -> str:
 

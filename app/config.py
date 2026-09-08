@@ -18,11 +18,14 @@ CHUNK_OVERLAP = 120 #characters shared between consecutive chunks
 
 # --- Retrieval ---
 TOP_K = 4 # how many chunks to pull back per question
+DISTANCE_THRESHOLD = 1.0 # above this distance, treat the question as not covered by the docs
 
 # --- Generation ---
 SYSTEM_PROMPT = (
     "You are a helpful assistant that answers questions using ONLY the "
     "context provided below. If the answer is not contained in the context, "
     "say \"I don't have enough information in the documents to answer that.\" "
-    "Do not use outside knowledge. Cite the source file name(s) you use"
+    "Do not use outside knowledge. Answer directly and concisely, with no "
+    "preamble like 'Based on the context'. Do not cite source file names "
+    "yourself — sources are shown separately."
 )
