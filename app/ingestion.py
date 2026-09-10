@@ -58,3 +58,34 @@ def chunk_text(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVE
             break
         start = end - overlap
     return chunks
+
+# --- Bonus: a second chunking strategy, for comparison ---
+def chunk_text_by_paragraph(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) -> List[str]:
+    """
+    Paragraph-aware chunking: groups whole paragraphs together until adding
+    another one would exceed chunk_size, instead of cutting at a fixed
+    character count. Never splits a paragraph in the middle unless that one
+    paragraph alone is already bigger than chunk_size, in which case it falls
+    back to fixed-size chunking for just that paragraph.
+    """
+    text = text.strip()
+    if not text:
+        return []
+    paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
+    chunks: List[str] = []
+    current = ""
+    for para in paragraphs:
+        candidate = f"{current}\n\n{para}" if current else para
+        if len(candidate) <= chunk_size:
+            current = candidate
+            continue
+        if current:
+            chunks.append(current)
+            current = ""
+        if len(para) > chunk_size:
+            chunks.extend(chunk_text(para, chunk_size, overlap))
+        else:
+            current = para
+    if current:
+        chunks.append(current)
+    return chunks
