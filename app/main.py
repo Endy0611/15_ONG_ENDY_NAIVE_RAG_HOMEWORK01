@@ -8,7 +8,7 @@ Run it:
 Then test it with curl (see README.md for full examples): 
     curl -X POST http://127.0.0.1:8000/ingest
     curl -X POST http://127.0.0.1:8000/chat -H "Content-Type: application/json" \
-        -d '{"query": "What is the vacation policy?"}'
+        -d '{"question": "What is the vacation policy?"}'
 
 Or run it as a plain terminal chat loop (no server needed):
     poetry run python -m app.main
@@ -24,7 +24,7 @@ from pydantic import BaseModel
 from app.pipeline import answer_question
 from app.vector_store import build_index
 
-app = FastAPI(title="Baseline Chat-with-Docuements API")
+app = FastAPI(title="Baseline Chat-with-Documents API")
 
 class ChatRequest(BaseModel):
     question: str
@@ -36,7 +36,7 @@ class ChatResponse(BaseModel):
 
 @app.post("/ingest")
 def ingest():
-    """"(Re)build the vector index from everything in data/."""
+    """(Re)build the vector index from everything in data/."""
     try:
         count = build_index()
     except FileNotFoundError as e:

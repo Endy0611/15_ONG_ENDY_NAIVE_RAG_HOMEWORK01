@@ -1,8 +1,8 @@
 """
-One function, one job: urn text into vectors using the local Ollama
-embedding model. nomic-embed-text
+One function, one job: turn text into vectors using the local Ollama
+embedding model, nomic-embed-text.
 Both ingestion (embedding chunks) and retrieval
-(embedding the users's question) call this, so the two are guarantedd to use the same model and
+(embedding the user's question) call this, so the two are guaranteed to use the same model and
 never drift apart.
 """
 

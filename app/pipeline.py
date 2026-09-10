@@ -11,7 +11,7 @@ def answer_question(query: str, top_k: int | None = None) -> dict:
 
     # if even the closest chunk is a weak match, don't ask the LLM to guess
     if not chunks or chunks[0]["distance"] > DISTANCE_THRESHOLD:
-        return {"answer": "I could not find this in your documents.", "sources": [], "chunks": chunks}
+        return {"answer": "I could not found this in your documents.", "sources": [], "chunks": chunks}
 
     answer = generate_answer(query, chunks)
     sources = sorted({c["source"] for c in chunks})

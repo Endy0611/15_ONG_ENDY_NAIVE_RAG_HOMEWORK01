@@ -1,6 +1,6 @@
 """
 Stage 1 of the pipeline: turn raw files in data/ into searchable vectors.
-Flow: load file -> split into chunks -> embed each chunk -> stroe in chroma
+Flow: load file -> split into chunks -> embed each chunk -> store in chroma
 
 Run directly to (re) build the index from scratch: 
 poetry run python -m app.vector_store

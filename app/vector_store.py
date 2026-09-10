@@ -1,5 +1,5 @@
 """
-Stage 1 of the pipeline (continued): embed chunks and stroe them in chroma.
+Stage 1 of the pipeline (continued): embed chunks and store them in chroma.
 """
 
 import chromadb
