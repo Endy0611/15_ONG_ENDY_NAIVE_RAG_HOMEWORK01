@@ -61,9 +61,20 @@ def run_chat_loop():
         if not question:
             continue
         result = answer_question(question)
+
+        # Bonus: show the retrieved chunks before the answer, so you can see
+        # exactly what context the model was given to work with.
+        if result["chunks"]:
+            print("\nRetrieved chunks:")
+            for i, c in enumerate(result["chunks"], start=1):
+                preview = c["text"][:150].replace("\n", " ")
+                print(f"  [{i}] {c['source']} (distance={c['distance']:.4f}): {preview}...")
+            print()
+
         print(f"Answer: {result['answer']}")
         if result["sources"]:
             print(f"Sources: {', '.join(result['sources'])}")
+        print()
 
 if __name__ == "__main__":
     run_chat_loop()
